@@ -5,6 +5,7 @@ import com.example.backend.payload.ApiResponse;
 import com.example.backend.payload.LoginRequest;
 import com.example.backend.payload.RegisterRequest;
 import com.example.backend.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,13 +20,14 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, HttpServletRequest request) {
         User user = userService.findByUsername(loginRequest.getUsername());
         if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse(false, "没有该用户"));
         }
         boolean isValidUser = userService.validateUser(loginRequest.getUsername(), loginRequest.getPassword());
         if (isValidUser) {
+            request.getSession().setAttribute("user", user); // 设置会话信息
             return ResponseEntity.ok(new ApiResponse(true, "登录成功"));
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponse(false, "密码不正确"));
