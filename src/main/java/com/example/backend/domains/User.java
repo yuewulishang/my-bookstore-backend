@@ -11,8 +11,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 
-@Setter
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -29,10 +29,13 @@ public class User {
     @Column(name = "username", nullable = false)
     private String username;
 
+    @Column(name = "password", nullable = false)
+    private String password;  // 存储用户的密码
+
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "phone_number", nullable = false)
+    @Column(name = "phone_number")
     private String phoneNumber;
 
     @CreationTimestamp
@@ -44,7 +47,5 @@ public class User {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserAuth> auths;
-
-    // Lombok will generate the getters and setters
+    private List<UserAuth> auths;  // 关联多种用户认证方式
 }

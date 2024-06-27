@@ -10,8 +10,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-@Setter
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -23,10 +23,10 @@ public class UserAuth {
     private Long id;
 
     @Column(name = "auth_type", nullable = false)
-    private String authType;
+    private String authType;  // 例如 "PASSWORD", "OAUTH", "API_KEY"
 
     @Column(name = "auth_value", nullable = false)
-    private String authValue;
+    private String authValue; // 例如 密码的哈希值，OAuth 令牌
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -39,6 +39,4 @@ public class UserAuth {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    // Lombok will generate the getters and setters
 }
