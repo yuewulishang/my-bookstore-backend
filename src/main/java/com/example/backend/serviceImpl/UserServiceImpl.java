@@ -24,9 +24,13 @@ public class UserServiceImpl implements UserService {
         if (user == null) {
             return false;
         }
+        if (!user.isEnabled()) {
+            throw new RuntimeException("您的账号已经被禁用");
+        }
         UserAuth userAuth = userAuthRepository.findByUserAndAuthType(user, "PASSWORD");
         return userAuth != null && userAuth.getAuthValue().equals(password);
     }
+
 
     @Override
     public boolean registerUser(RegisterRequestDto registerRequestDto) {
@@ -37,7 +41,9 @@ public class UserServiceImpl implements UserService {
         user.setUsername(registerRequestDto.getUsername());
         user.setPassword(registerRequestDto.getPassword());
         user.setEmail(registerRequestDto.getEmail());
-        user.setPhoneNumber(registerRequestDto.getPhoneNumber()); // 确保保存 phoneNumber
+        user.setPhoneNumber(registerRequestDto.getPhoneNumber());
+        user.setAdmin(false);  // 默认新注册用户为顾客
+        user.setEnabled(true);
         userRepository.save(user);
 
         UserAuth userAuth = new UserAuth();
@@ -52,5 +58,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public void disableUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setEnabled(false);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void enableUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+        user.setEnabled(true);
+        userRepository.save(user);
     }
 }

@@ -17,4 +17,10 @@ public interface UserController {
 
     @PostMapping("/register")
     ResponseEntity<?> register(@RequestBody RegisterRequestDto registerRequestDto);
+
+    @PostMapping("/disable/{userId}")
+    ResponseEntity<?> disableUser(@PathVariable Long userId);
+
+    @PostMapping("/enable/{userId}")
+    ResponseEntity<?> enableUser(@PathVariable Long userId);
 }

@@ -46,6 +46,12 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "admin", nullable = false, columnDefinition = "BOOLEAN DEFAULT FALSE")
+    private boolean admin;
+
+    @Column(name = "enabled", nullable = false, columnDefinition = "BOOLEAN DEFAULT TRUE")
+    private boolean enabled;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserAuth> auths;  // 关联多种用户认证方式
 }

@@ -21,16 +21,22 @@ public class UserControllerImpl implements UserController {
 
     @Override
     public ResponseEntity<?> login(@RequestBody LoginRequestDto loginRequestDto, HttpServletRequest request) {
-        User user = userService.findByUsername(loginRequestDto.getUsername());
-        if (user == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponseDto(false, "没有该用户"));
-        }
-        boolean isValidUser = userService.validateUser(loginRequestDto.getUsername(), loginRequestDto.getPassword());
-        if (isValidUser) {
-            request.getSession().setAttribute("user", user); // 设置会话信息
-            return ResponseEntity.ok(new ApiResponseDto(true, "登录成功"));
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponseDto(false, "密码不正确"));
+        try {
+            User user = userService.findByUsername(loginRequestDto.getUsername());
+            if (user == null) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponseDto(false, "没有该用户"));
+            }
+            boolean isValidUser = userService.validateUser(loginRequestDto.getUsername(), loginRequestDto.getPassword());
+            if (isValidUser) {
+                request.getSession().setAttribute("user", user);
+                ApiResponseDto responseDto = new ApiResponseDto(true, "登录成功");
+                responseDto.setData(user.isAdmin()); // 将用户角色信息一并返回
+                return ResponseEntity.ok(responseDto);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ApiResponseDto(false, "密码不正确或账号被禁用"));
+            }
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiResponseDto(false, e.getMessage()));
         }
     }
 
@@ -42,5 +48,17 @@ public class UserControllerImpl implements UserController {
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ApiResponseDto(false, "注册失败"));
         }
+    }
+
+    @Override
+    public ResponseEntity<?> disableUser(Long userId) {
+        userService.disableUser(userId);
+        return ResponseEntity.ok(new ApiResponseDto(true, "用户已禁用"));
+    }
+
+    @Override
+    public ResponseEntity<?> enableUser(Long userId) {
+        userService.enableUser(userId);
+        return ResponseEntity.ok(new ApiResponseDto(true, "用户已启用"));
     }
 }
