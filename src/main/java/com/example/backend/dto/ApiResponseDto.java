@@ -1,4 +1,4 @@
-package com.example.backend.payload;
+package com.example.backend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ApiResponse {
+public class ApiResponseDto {
     private boolean success;
     private String message;
 }
