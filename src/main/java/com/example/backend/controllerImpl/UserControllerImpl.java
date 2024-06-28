@@ -10,8 +10,11 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class UserControllerImpl implements UserController {
@@ -51,14 +54,20 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
-    public ResponseEntity<?> disableUser(Long userId) {
-        userService.disableUser(userId);
+    public List<User> getAllUsers() {
+        return userService.getAllUsers();
+    }
+
+    @Override
+    public ResponseEntity<?> disableUser(@PathVariable Long id) {
+        userService.disableUser(id);
         return ResponseEntity.ok(new ApiResponseDto(true, "用户已禁用"));
     }
 
     @Override
-    public ResponseEntity<?> enableUser(Long userId) {
-        userService.enableUser(userId);
+    public ResponseEntity<?> enableUser(@PathVariable Long id) {
+        userService.enableUser(id);
         return ResponseEntity.ok(new ApiResponseDto(true, "用户已启用"));
     }
+
 }

@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.domains.User;
 import com.example.backend.dto.ApiResponseDto;
 import com.example.backend.dto.LoginRequestDto;
 import com.example.backend.dto.RegisterRequestDto;
@@ -7,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletRequest;
+
+import java.util.List;
 
 @RequestMapping("/api")
 @CrossOrigin(origins = "http://localhost:3000")  // 允许来自 http://localhost:3000 的请求
@@ -18,9 +21,12 @@ public interface UserController {
     @PostMapping("/register")
     ResponseEntity<?> register(@RequestBody RegisterRequestDto registerRequestDto);
 
-    @PostMapping("/disable/{userId}")
-    ResponseEntity<?> disableUser(@PathVariable Long userId);
+    @GetMapping("/users")
+    List<User> getAllUsers();
 
-    @PostMapping("/enable/{userId}")
-    ResponseEntity<?> enableUser(@PathVariable Long userId);
+    @PostMapping("/users/{id}/disable")
+    ResponseEntity<?> disableUser(@PathVariable Long id);
+
+    @PostMapping("/users/{id}/enable")
+    ResponseEntity<?> enableUser(@PathVariable Long id);
 }
