@@ -3,6 +3,7 @@ package com.example.backend.serviceImpl;
 import com.example.backend.domains.Book;
 import com.example.backend.domains.Order;
 import com.example.backend.domains.OrderItem;
+import com.example.backend.dto.BookSalesDto;
 import com.example.backend.repo.BookRepository;
 import com.example.backend.repo.OrderRepository;
 import com.example.backend.service.OrderService;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -53,5 +55,21 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<Order> getOrdersByBookTitle(String title) {
         return orderRepository.findAllByBookTitle(title);
+    }
+
+    @Override
+    public List<BookSalesDto> getBookSales(LocalDateTime startDate, LocalDateTime endDate) {
+        List<Order> orders = orderRepository.findAllByDateBetween(startDate, endDate);
+
+        return orders.stream()
+                .flatMap(order -> order.getItems().stream())
+                .collect(Collectors.groupingBy(
+                        item -> item.getTitle(),
+                        Collectors.summingLong(item -> item.getQuantity())
+                ))
+                .entrySet().stream()
+                .map(entry -> new BookSalesDto(entry.getKey(), entry.getValue()))
+                .sorted((a, b) -> Long.compare(b.getSales(), a.getSales()))
+                .collect(Collectors.toList());
     }
 }

@@ -1,5 +1,6 @@
 package com.example.backend.service;
 
+import com.example.backend.dto.BookSalesDto;
 import com.example.backend.domains.Order;
 
 import java.time.LocalDateTime;
@@ -10,4 +11,5 @@ public interface OrderService {
     Order createOrder(Order order);
     List<Order> getOrdersByDateRange(LocalDateTime startDate, LocalDateTime endDate);
     List<Order> getOrdersByBookTitle(String title);
+    List<BookSalesDto> getBookSales(LocalDateTime startDate, LocalDateTime endDate);
 }
