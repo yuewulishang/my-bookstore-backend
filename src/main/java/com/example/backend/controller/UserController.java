@@ -29,4 +29,7 @@ public interface UserController {
 
     @PostMapping("/users/{id}/enable")
     ResponseEntity<?> enableUser(@PathVariable Long id);
+
+    @GetMapping("/users/exists/{username}")
+    ResponseEntity<Boolean> checkUsernameExists(@PathVariable String username);
 }

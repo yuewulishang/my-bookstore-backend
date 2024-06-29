@@ -1,8 +1,15 @@
 package com.example.backend.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
 public class ApiResponseDto {
     private boolean success;
     private String message;
+    // 新增 setter
+    // 新增 getter
+    @Setter
     private Object data; // 新增字段
 
     public ApiResponseDto(boolean success, String message) {
@@ -10,19 +17,4 @@ public class ApiResponseDto {
         this.message = message;
     }
 
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public Object getData() { // 新增 getter
-        return data;
-    }
-
-    public void setData(Object data) { // 新增 setter
-        this.data = data;
-    }
 }

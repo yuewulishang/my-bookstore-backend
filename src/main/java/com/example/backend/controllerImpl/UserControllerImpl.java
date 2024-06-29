@@ -70,4 +70,9 @@ public class UserControllerImpl implements UserController {
         return ResponseEntity.ok(new ApiResponseDto(true, "用户已启用"));
     }
 
+    @Override
+    public ResponseEntity<Boolean> checkUsernameExists(@PathVariable String username) {
+        boolean exists = userService.existsByUsername(username);
+        return ResponseEntity.ok(exists);
+    }
 }

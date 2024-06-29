@@ -33,6 +33,9 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     private Order order;
 
+    @OneToOne
+    @JoinColumn(name = "book_id")
+    private Book book;
     // Lombok will generate the getters and setters
 
 

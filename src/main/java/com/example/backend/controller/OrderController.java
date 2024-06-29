@@ -3,15 +3,19 @@ package com.example.backend.controller;
 import com.example.backend.domains.Order;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-@RequestMapping("/api/orders")
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public interface OrderController {
+    @GetMapping
+    List<Order> getAllOrders();
 
     @PostMapping
     Order createOrder(@RequestBody Order order);
 
-    @GetMapping
-    List<Order> getAllOrders();
+    @GetMapping("/date-range")
+    List<Order> getOrdersByDateRange(@RequestParam LocalDateTime startDate, @RequestParam LocalDateTime endDate);
+
+    @GetMapping("/book-title")
+    List<Order> getOrdersByBookTitle(@RequestParam String title);
 }

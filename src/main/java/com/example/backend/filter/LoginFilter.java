@@ -39,7 +39,7 @@ public class LoginFilter implements Filter {
         String path = httpRequest.getRequestURI();
 
         // 允许访问登录和注册路径
-        if (path.startsWith("/api/login") || path.startsWith("/api/register")) {
+        if (path.startsWith("/api/login") || path.startsWith("/api/register") || path.startsWith("/api/users/exists")) {
             chain.doFilter(request, response);
             return;
         }

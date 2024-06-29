@@ -54,4 +54,5 @@ public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserAuth> auths;  // 关联多种用户认证方式
+
 }
