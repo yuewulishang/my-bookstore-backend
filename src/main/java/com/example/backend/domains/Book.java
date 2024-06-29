@@ -30,6 +30,9 @@ public class Book {
     @Column(name = "stock")
     private Integer stock;
 
+    @Column(name = "isbn")
+    private String isbn;
+
     @Column(name = "image")
     private String image;
 
